@@ -1,0 +1,16 @@
+Role	Email	Password
+Consultant	
+consultant@dkn.com
+password123
+Knowledge Champion	
+champion@dkn.com
+password123
+Project Manager	
+manager@dkn.com
+password123
+Administrator	
+admin@dkn.com
+123456
+Governance Council	
+governance@dkn.com
+password123
