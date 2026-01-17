@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Lock, Eye, EyeOff, Mail, LogIn } from 'lucide-react';
+import { Lock, Eye, EyeOff, Mail, LogIn, ChevronDown, ChevronUp, Users } from 'lucide-react';
+
+// Default test accounts
+const demoAccounts = [
+    { role: 'Consultant', email: 'consultant@dkn.com', password: 'password123' },
+    { role: 'Knowledge Champion', email: 'champion@dkn.com', password: 'password123' },
+    { role: 'Project Manager', email: 'manager@dkn.com', password: 'password123' },
+    { role: 'Administrator', email: 'admin@dkn.com', password: '123456' },
+    { role: 'Governance Council', email: 'governance@dkn.com', password: 'password123' }
+];
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -9,8 +18,15 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showDemoAccounts, setShowDemoAccounts] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
+
+    const handleDemoLogin = (account) => {
+        setEmail(account.email);
+        setPassword(account.password);
+        setError('');
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -125,8 +141,43 @@ const Login = () => {
                     </button>
                 </form>
 
+                {/* Demo Accounts Section */}
+                <div className="mt-6">
+                    <button
+                        type="button"
+                        onClick={() => setShowDemoAccounts(!showDemoAccounts)}
+                        className="w-full flex items-center justify-center gap-2 text-blue-300 hover:text-blue-200 transition-colors text-sm py-2"
+                    >
+                        <Users size={16} />
+                        <span>Demo Accounts</span>
+                        {showDemoAccounts ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </button>
+
+                    {showDemoAccounts && (
+                        <div className="mt-3 bg-white/5 rounded-xl p-3 border border-white/10 space-y-2 animate-fadeIn">
+                            <p className="text-xs text-slate-400 text-center mb-2">Click to auto-fill credentials</p>
+                            {demoAccounts.map((account, index) => (
+                                <button
+                                    key={index}
+                                    type="button"
+                                    onClick={() => handleDemoLogin(account)}
+                                    className="w-full flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 transition-all duration-200 group"
+                                >
+                                    <div className="text-left">
+                                        <span className="text-blue-300 text-sm font-medium block">{account.role}</span>
+                                        <span className="text-slate-400 text-xs">{account.email}</span>
+                                    </div>
+                                    <span className="text-slate-500 text-xs group-hover:text-blue-300 transition-colors">
+                                        {account.password}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
                 {/* Footer */}
-                <div className="mt-8 text-center">
+                <div className="mt-6 text-center">
                     <p className="text-slate-400 text-sm">
                         Secure enterprise knowledge management
                     </p>
